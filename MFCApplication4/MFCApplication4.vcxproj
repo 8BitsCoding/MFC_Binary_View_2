@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{94FAF04F-2EFB-43D1-96C1-89B4F11F02F2}</ProjectGuid>
+    <ProjectGuid>{2896EF77-5DCD-493B-BB7D-83A91D53FC10}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
-    <RootNamespace>MFCApplication3</RootNamespace>
+    <RootNamespace>MFCApplication4</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -179,17 +179,17 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="DataListWnd.h" />
-    <ClInclude Include="MFCApplication3.h" />
-    <ClInclude Include="MFCApplication3Dlg.h" />
+    <ClInclude Include="BinDataView.h" />
+    <ClInclude Include="MFCApplication4.h" />
+    <ClInclude Include="MFCApplication4Dlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DataListWnd.cpp" />
-    <ClCompile Include="MFCApplication3.cpp" />
-    <ClCompile Include="MFCApplication3Dlg.cpp" />
+    <ClCompile Include="BinDataView.cpp" />
+    <ClCompile Include="MFCApplication4.cpp" />
+    <ClCompile Include="MFCApplication4Dlg.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -198,13 +198,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MFCApplication3.rc" />
+    <ResourceCompile Include="MFCApplication4.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\MFCApplication3.rc2" />
+    <None Include="res\MFCApplication4.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\MFCApplication3.ico" />
+    <Image Include="res\MFCApplication4.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

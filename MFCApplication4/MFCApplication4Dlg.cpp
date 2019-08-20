@@ -1,10 +1,10 @@
 ﻿
-// MFCApplication3Dlg.cpp: 구현 파일
+// MFCApplication4Dlg.cpp: 구현 파일
 //
 
 #include "stdafx.h"
-#include "MFCApplication3.h"
-#include "MFCApplication3Dlg.h"
+#include "MFCApplication4.h"
+#include "MFCApplication4Dlg.h"
 #include "afxdialogex.h"
 
 #ifdef _DEBUG
@@ -12,36 +12,34 @@
 #endif
 
 
-// CMFCApplication3Dlg 대화 상자
+// CMFCApplication4Dlg 대화 상자
 
 
 
-CMFCApplication3Dlg::CMFCApplication3Dlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_MFCAPPLICATION3_DIALOG, pParent)
+CMFCApplication4Dlg::CMFCApplication4Dlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_MFCAPPLICATION4_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CMFCApplication3Dlg::DoDataExchange(CDataExchange* pDX)
+void CMFCApplication4Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_STATE_CHECK, m_state_check);
 }
 
-BEGIN_MESSAGE_MAP(CMFCApplication3Dlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CMFCApplication4Dlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDOK, &CMFCApplication4Dlg::OnBnClickedOk)
+	ON_BN_CLICKED(IDCANCEL, &CMFCApplication4Dlg::OnBnClickedCancel)
+	ON_BN_CLICKED(IDC_SELECT_BTN, &CMFCApplication4Dlg::OnBnClickedSelectBtn)
 	ON_WM_DESTROY()
-	ON_WM_TIMER()
-	ON_BN_CLICKED(IDC_START_BTN, &CMFCApplication3Dlg::OnBnClickedStartBtn)
-	ON_BN_CLICKED(IDC_STOP_BTN, &CMFCApplication3Dlg::OnBnClickedStopBtn)
-	ON_BN_CLICKED(IDC_STATE_CHECK, &CMFCApplication3Dlg::OnBnClickedStateCheck)
 END_MESSAGE_MAP()
 
 
-// CMFCApplication3Dlg 메시지 처리기
+// CMFCApplication4Dlg 메시지 처리기
 
-BOOL CMFCApplication3Dlg::OnInitDialog()
+BOOL CMFCApplication4Dlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -53,13 +51,10 @@ BOOL CMFCApplication3Dlg::OnInitDialog()
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 
 	CRect r;
-	GetDlgItem(IDC_LIST_RECT)->GetWindowRect(r);
+	GetDlgItem(IDC_VIEW_RECT)->GetWindowRect(r);
 	ScreenToClient(r);
-	m_data_list.CreateEx(WS_EX_STATICEDGE, NULL, NULL, WS_CHILD | WS_BORDER | WS_VISIBLE | WS_VSCROLL, r, this, 2005);
 
-	SetDlgItemInt(IDC_UPDATE_TIME_EDIT, 100);
-
-	srand((unsigned int)time(NULL));
+	m_bin_view.CreateEx(WS_EX_STATICEDGE, NULL, NULL, WS_CHILD | WS_VISIBLE | WS_VSCROLL, r, this, 2005);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -68,7 +63,7 @@ BOOL CMFCApplication3Dlg::OnInitDialog()
 //  아래 코드가 필요합니다.  문서/뷰 모델을 사용하는 MFC 응용 프로그램의 경우에는
 //  프레임워크에서 이 작업을 자동으로 수행합니다.
 
-void CMFCApplication3Dlg::OnPaint()
+void CMFCApplication4Dlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -95,49 +90,45 @@ void CMFCApplication3Dlg::OnPaint()
 
 // 사용자가 최소화된 창을 끄는 동안에 커서가 표시되도록 시스템에서
 //  이 함수를 호출합니다.
-HCURSOR CMFCApplication3Dlg::OnQueryDragIcon()
+HCURSOR CMFCApplication4Dlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
 
 
-void CMFCApplication3Dlg::OnDestroy()
+void CMFCApplication4Dlg::OnBnClickedOk()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	//CDialogEx::OnOK();
+}
+
+
+void CMFCApplication4Dlg::OnBnClickedCancel()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CDialogEx::OnCancel();
+}
+
+
+void CMFCApplication4Dlg::OnBnClickedSelectBtn()
+{
+	wchar_t name_filter[] = L"모든 파일(*.*)|*.*|Raw 파일(*.raw)|*.raw|Data 파일(*.dat)|*.dat|BMP 파일(*.bmp)|*.bmp||";
+
+	CFileDialog ins_dlg(TRUE, L"*", L"*.*", OFN_HIDEREADONLY | OFN_NOCHANGEDIR, name_filter);
+	ins_dlg.m_ofn.nFilterIndex = 1;
+
+	if (IDOK == ins_dlg.DoModal())
+	{
+		SetDlgItemText(IDC_PATH_STATIC, ins_dlg.GetPathName());
+		m_bin_view.LoadFile(ins_dlg.GetPathName());
+	}
+}
+
+
+void CMFCApplication4Dlg::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
-	OnBnClickedStopBtn();
-	m_data_list.DestroyWindow();
-}
-
-
-void CMFCApplication3Dlg::OnTimer(UINT_PTR nIDEvent)
-{
-	if (nIDEvent) {
-		int data[MAX_VALUE_COUNT];
-		for (int i = 0; i < MAX_GROUP_COUNT; i++) {
-			for (int sub_i = 0; sub_i < MAX_VALUE_COUNT; sub_i++)	data[sub_i] = rand() % 1000;
-			m_data_list.UpdateData(i, data);
-		}
-		m_data_list.Redraw();
-	}
-	CDialogEx::OnTimer(nIDEvent);
-}
-
-
-void CMFCApplication3Dlg::OnBnClickedStartBtn()
-{
-	SetTimer(1, GetDlgItemInt(IDC_UPDATE_TIME_EDIT), NULL);
-}
-
-
-void CMFCApplication3Dlg::OnBnClickedStopBtn()
-{
-	KillTimer(1);
-}
-
-
-void CMFCApplication3Dlg::OnBnClickedStateCheck()
-{
-	m_data_list.SetStateCheck(m_state_check.GetCheck());
+	m_bin_view.DestroyWindow();
 }
